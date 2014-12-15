@@ -1,5 +1,11 @@
 <#include "/part/header.ftl">
-
+<#if errors??>
+<div class="alert alert-danger" role="alert">
+    <#list errors as error>
+        <p>${error}</p>
+    </#list>
+</div>
+</#if>
 <form method="post" action="/author/update/${author.idAuthor}" name="author">
     <div class="form-group">
         <label >Family</label>
@@ -11,7 +17,7 @@
     </div>
     <div class="form-group">
         <label >Year</label>
-        <input type="number" class="form-control" name="year" value="${author.year}">
+        <input type="text" class="form-control" name="year" value="${author.year}">
     </div>
     <input class="btn btn-primary" type="submit" value="Submit">
 </form>

@@ -60,4 +60,40 @@ public class AuthorService {
     public boolean checkAuthor(Integer id){
         return authorRepository.checkAuthor(id)==0;
     }
+
+    @Transactional
+    public int sumProfit(Integer id){
+        try{
+            int profit = authorRepository.sumProfit(id);
+            return profit;
+        }catch(Throwable e){
+            return 0;
+        }
+    }
+
+    @Transactional
+    public List<String> getGenres(Integer id){
+        List<Genre> lst = new ArrayList<Genre>();
+        return authorRepository.getGenres(id);
+    }
+
+    @Transactional
+    public int minYear(Integer id){
+        try{
+            int minYear = authorRepository.minYear(id);
+            return minYear;
+        }catch(Throwable e){
+            return 0;
+        }
+    }
+
+    @Transactional
+    public int maxYear(Integer id){
+        try{
+            int maxYear = authorRepository.maxYear(id);
+            return maxYear;
+        }catch(Throwable e){
+            return 0;
+        }
+    }
 }

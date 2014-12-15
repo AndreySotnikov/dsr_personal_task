@@ -1,4 +1,9 @@
 <#include "/part/header.ftl">
+<#if error==1>
+<div class="alert alert-danger" role="alert">
+    Невозможно удалить книгу, пока она принадлежит заказу
+</div>
+</#if>
 <h1>Все книги</h1>
 <div class="row">
     <div class="col-sm-8">
@@ -10,6 +15,8 @@
                 <th>Год издания</th>
                 <th>Объем</th>
                 <th>Авторы</th>
+                <th>Цена</th>
+                <th>Подробная информация</th>
                 <th>Действия</th>
             </tr>
         <#list bookList as book>
@@ -26,6 +33,8 @@
                     </#list>
                 </td>
                 </ul>
+                <td>${book.price}</td>
+                <td><a href="/book/show/${book.idBook}">Показать</a></td>
                 <td>
                     <span class="glyphicon glyphicon-pencil"></span>
                     <a href="/book/update/${book.idBook}">Edit</a>

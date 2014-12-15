@@ -1,6 +1,8 @@
 <#include "/part/header.ftl">
 <#if error==1>
-<p class="bg-warning">Невозможно удалить автора, пока у него существуют книги</p>
+<div class="alert alert-danger" role="alert">
+    Невозможно удалить автора, пока у него существуют книги
+</div>
 </#if>
 <h1>Все авторы</h1>
 <div class="row">
@@ -11,6 +13,7 @@
                 <th>Фамилия</th>
                 <th>Имя</th>
                 <th>Год рождения</th>
+                <th>Подробная информация</th>
                 <th>Действия</th>
             </tr>
         <#list authorList as author>
@@ -19,6 +22,7 @@
                 <td>${author.family}</td>
                 <td>${author.name}</td>
                 <td>${author.year}</td>
+                <td><a href="/author/show/${author.idAuthor}">Показать</a></td>
                 <td>
                     <span class="glyphicon glyphicon-pencil"></span>
                     <a href="/author/update/${author.idAuthor}">Edit</a>

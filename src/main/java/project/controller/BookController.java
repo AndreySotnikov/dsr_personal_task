@@ -3,6 +3,8 @@ package project.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import project.dto.BookDto;
 import project.entity.Author;
@@ -13,7 +15,10 @@ import project.service.BookService;
 import project.service.GenreService;
 import project.service.OrderService;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,22 +33,27 @@ public class BookController {
     private AuthorService authorService;
     @Autowired
     private GenreService genreService;
+    private int delError=0;
 
     @RequestMapping("/all")
     public String getAll(ModelMap modelMap) {
         modelMap.addAttribute("bookList", bookService.getAll());
+        modelMap.addAttribute("error",delError);
+        delError=0;
         return "books/all";
     }
 
-//    @RequestMapping("/{id}")
-//    public String getOne(@PathVariable Integer id, ModelMap modelMap) {
-//        modelMap.addAttribute("order", orderService.getOne(id));
-//        return "book/one";
-//    }
+    @RequestMapping("/show/{id}")
+    public String showOne(@PathVariable Integer id, ModelMap modelMap){
+        modelMap.addAttribute("book",bookService.getOne(id));
+        modelMap.addAttribute("profit",bookService.sumProfit(id));
+        return  "books/one";
+    }
 
     @RequestMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
-        bookService.delete(id);
+        if(!bookService.delete(id))
+            delError = 1;
         return "redirect:/book/all";
     }
 
@@ -54,51 +64,42 @@ public class BookController {
         return "books/addForm";
     }
 
-    //    @RequestMapping(value = "/add", method = RequestMethod.POST)
-//    public String add(@ModelAttribute("book") Book book,
-//                      @RequestParam("genre") String genre,
-//                      @RequestParam("authors") String[] authors)   {
-//        book.setGenre(genreService.getGenre(genre));
-//        Set<Author> author = new HashSet<Author>();
-//        for (String auth : authors){
-//            String[] temp = auth.split(" ");
-//            author.add(authorService.getOne(Integer.parseInt(temp[0])));
-//        }
-//        book.setAuthor(author);
-//        bookService.add(book);
-//        return "redirect:/book/all";
-//    }
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String add(@ModelAttribute("book") BookDto book) {
+    public String add(@ModelAttribute("book") @Valid BookDto book, BindingResult bindingResult, ModelMap modelMap) {
+        if (bindingResult.hasErrors()) {
+            List<String> validationErrors = new ArrayList<String>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                validationErrors.add(error.getDefaultMessage());
+            }
+            modelMap.addAttribute("authorList", authorService.getAll());
+            modelMap.addAttribute("genreList", genreService.getAll());
+            modelMap.addAttribute("errors", validationErrors);
+            return "books/addForm";
+        }
         bookService.add(book);
         return "redirect:/book/all";
     }
-
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
     public String updateForm(@PathVariable Integer id, ModelMap modelMap) {
         modelMap.addAttribute("book", bookService.getOne(id));
         modelMap.addAttribute("genreList", genreService.getAll());
         modelMap.addAttribute("authorList", authorService.getAll());
-        return "books/updateForm";
+        return "books/addForm";
     }
 
-//    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-//    public String update(@PathVariable Integer id, @ModelAttribute("book") Book book,
-//                         @RequestParam("genre") String genre,
-//                         @RequestParam("authors") String[] authors) {
-//        book.setGenre(genreService.getGenre(genre));
-//        Set<Author> author = new HashSet<Author>();
-//        for (String auth : authors){
-//            String[] temp = auth.split(" ");
-//            author.add(authorService.getOne(Integer.parseInt(temp[0])));
-//        }
-//        book.setAuthor(author);
-//        bookService.update(id,book);
-//        return "redirect:/book/all";
-//    }
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    public String update(@PathVariable Integer id, @ModelAttribute("book") BookDto book){
+    public String update(@PathVariable Integer id, @ModelAttribute("book") @Valid BookDto book, BindingResult bindingResult, ModelMap modelMap){
+        if (bindingResult.hasErrors()) {
+            List<String> validationErrors = new ArrayList<String>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                validationErrors.add(error.getDefaultMessage());
+            }
+            modelMap.addAttribute("authorList", authorService.getAll());
+            modelMap.addAttribute("genreList", genreService.getAll());
+            modelMap.addAttribute("errors", validationErrors);
+            return "books/addForm";
+        }
         bookService.update(id,book);
         return "redirect:/book/all";
     }

@@ -33,7 +33,7 @@ public class GenreService {
 
     @Transactional
     public boolean delete(int id) {
-        if(chechGenre(id)) {
+        if(checkGenre(id)) {
             genreRepository.delete(id);
             return true;
         }
@@ -57,7 +57,7 @@ public class GenreService {
     }
 
     @Transactional
-    public boolean chechGenre(Integer id){
+    public boolean checkGenre(Integer id){
         return genreRepository.checkGenre(id)==0;
     }
 }

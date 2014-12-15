@@ -2,13 +2,20 @@ package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import project.entity.Genre;
 import project.service.GenreService;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Андрей on 10.12.2014.
@@ -47,7 +54,15 @@ public class GenreController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String add(@ModelAttribute("Genre") Genre genre)  {
+    public String add(@ModelAttribute("genre") @Valid Genre genre, BindingResult bindingResult, ModelMap modelMap)  {
+        if (bindingResult.hasErrors()) {
+			List<String> validationErrors = new ArrayList<String>();
+			for (FieldError error : bindingResult.getFieldErrors()) {
+				validationErrors.add(error.getDefaultMessage());
+			}
+			modelMap.addAttribute("errors", validationErrors);
+			return "genres/addForm";
+		}
         genreService.add(genre);
         return "redirect:/genre/all";
     }
@@ -55,12 +70,20 @@ public class GenreController {
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
     public String updateForm(@PathVariable Integer id, ModelMap modelMap) {
         modelMap.addAttribute("genre", genreService.getOne(id));
-        return "genres/updateForm";
+        return "genres/addForm";
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)   //!!!!!!
     public String update(@PathVariable Integer id,
-                         @ModelAttribute("genre") Genre genre) {
+                         @ModelAttribute("genre") @Valid Genre genre, BindingResult bindingResult, ModelMap modelMap) {
+        if (bindingResult.hasErrors()) {
+            List<String> validationErrors = new ArrayList<String>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                validationErrors.add(error.getDefaultMessage());
+            }
+            modelMap.addAttribute("errors", validationErrors);
+            return "genres/addForm";
+        }
         genreService.update(id, genre);
         return "redirect:/genre/all";
     }

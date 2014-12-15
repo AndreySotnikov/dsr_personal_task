@@ -28,18 +28,6 @@ public class MainController {
         return "books/all";
     }
 
-//    @RequestMapping("/{id}")
-//    public String getOne(@PathVariable Integer id, ModelMap modelMap) {
-//        modelMap.addAttribute("book", bookService.getOne(id));
-//        return "book/one";
-//    }
-//
-//    @RequestMapping("/delete/{id}")
-//    public String delete(@PathVariable Integer id) {
-//        bookService.delete(id);
-//        return "redirect:/book";
-//    }
-
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String addForm() {
         return "books/addForm";

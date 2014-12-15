@@ -1,6 +1,8 @@
 <#include "/part/header.ftl">
 <#if error==1>
-<p class="bg-warning">Невозможно удалить жанр, пока у него существуют книги</p>
+<div class="alert alert-danger" role="alert">
+    Невозможно удалить жанр, пока у него существуют книги
+</div>
 </#if>
 <h1>Все жанры</h1>
 <div class="row">

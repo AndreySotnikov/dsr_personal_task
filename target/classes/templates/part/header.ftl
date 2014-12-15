@@ -14,14 +14,14 @@
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <a class="navbar-brand" href="/manage">Учет книг</a>
+            <a class="navbar-brand" href="/book/all">Учет книг</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/author/all">Авторы</a></li>
-                <li><a href="/order">Заказы</a></li>
+                <li><a href="/order/all">Заказы</a></li>
                 <li><a href="/book/all">Книги</a></li>
                 <li><a href="/genre/all">Жанры</a></li>
             </ul>

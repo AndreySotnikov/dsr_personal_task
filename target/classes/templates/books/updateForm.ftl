@@ -1,5 +1,11 @@
 <#include "/part/header.ftl">
-
+<#if errors??>
+<div class="alert alert-danger" role="alert">
+    <#list errors as error>
+        <p>${error}</p>
+    </#list>
+</div>
+</#if>
 <form method="post" action="/book/update/${book.idBook}" name="book">
     <div class="form-group">
         <label >Жанр</label>
@@ -28,6 +34,10 @@
             <option value="${author.idAuthor}">${author.idAuthor} ${author.family} ${author.name} ${author.year}</option>
         </#list>
         </select>
+    </div>
+    <div class="form-group">
+        <label >Цена</label>
+        <input type="text" class="form-control" name="price" value="${book.price}">
     </div>
     <input class="btn btn-primary" type="submit" value="Submit">
 </form>

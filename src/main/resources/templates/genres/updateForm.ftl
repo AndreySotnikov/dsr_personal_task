@@ -1,5 +1,11 @@
 <#include "/part/header.ftl">
-
+<#if errors??>
+<div class="alert alert-danger" role="alert">
+    <#list errors as error>
+        <p>${error}</p>
+    </#list>
+</div>
+</#if>
 <form method="post" action="/genre/update/${genre.idGenre}" name="genre">
     <div class="form-group">
         <label >Name</label>

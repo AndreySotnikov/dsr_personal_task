@@ -39,6 +39,7 @@ public class BookService {
         newBook.setName(book.getName());
         newBook.setYear(book.getYear());
         newBook.setVolume(book.getVolume());
+        newBook.setPrice(book.getPrice());
         Set<Author> set = new HashSet<Author>();
         for(Integer i : book.getAuthors()){
             set.add(authorRepository.findOne(i));
@@ -48,8 +49,12 @@ public class BookService {
     }
 
     @Transactional
-    public void delete(Integer id){
-        bookRepository.delete(id);
+    public boolean delete(Integer id){
+        if(checkBook(id)) {
+            bookRepository.delete(id);
+            return true;
+        }
+        return false;
     }
 
     @Transactional
@@ -83,11 +88,27 @@ public class BookService {
         updBook.setName(book.getName());
         updBook.setYear(book.getYear());
         updBook.setVolume(book.getVolume());
+        updBook.setPrice(book.getPrice());
         Set<Author> set = new HashSet<Author>();
         for(Integer i : book.getAuthors()){
             set.add(authorRepository.findOne(i));
         }
         updBook.setAuthor(set);
         return bookRepository.save(updBook);
+    }
+
+    @Transactional
+    public boolean checkBook(Integer id){
+        return bookRepository.checkBook(id)==0;
+    }
+
+    @Transactional
+    public int sumProfit(Integer id){
+        try{
+            int profit = bookRepository.sumProfit(id);
+            return profit;
+        }catch(Throwable e){
+            return 0;
+        }
     }
 }
