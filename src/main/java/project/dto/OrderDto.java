@@ -14,7 +14,7 @@ import java.util.Set;
 public class OrderDto {
     @Size(min = 5, message = "Поле \"ФИО\" должно быть длиннее 5 символов")
     private String FIO;
-    @NotNull(message = "Заполните книги в заказк")
+    @NotNull(message = "Заполните книги в заказах")
     private Integer[] books;
     @Size(min = 1, message = "Поле \"Дата\" не должно быть пустым")
     private String date;
